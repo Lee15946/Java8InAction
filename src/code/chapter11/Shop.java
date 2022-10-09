@@ -9,6 +9,7 @@ import static code.chapter11.Util.delay;
 public record Shop(String shopName) {
 
     double calculatePrice(String product) {
+        //Simulate the I/O or network delay
         delay();
         return RandomGenerator.getDefault().nextDouble() * product.charAt(0) + product.charAt(1);
     }

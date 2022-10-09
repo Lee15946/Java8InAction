@@ -4,7 +4,7 @@ import java.util.logging.Logger;
 
 import static code.chapter11.Util.compareSyncMethodWithAsyncMethod;
 import static code.chapter11.Util.compareSyncMethodWithParallelMethodAndAsyncMethod;
-import static code.chapter11.Util.usingAsyncStream;
+import static code.chapter11.Util.compareSyncStreamWithAsyncStream;
 
 public class Main {
     static Logger logger = Logger.getLogger(Main.class.getName());
@@ -12,7 +12,7 @@ public class Main {
     public static void main(String[] args) {
         compareSyncMethodWithAsyncMethod();
         compareSyncMethodWithParallelMethodAndAsyncMethod();
-        usingAsyncStream();
+        compareSyncStreamWithAsyncStream();
     }
 
 
