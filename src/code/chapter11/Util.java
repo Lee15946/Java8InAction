@@ -49,6 +49,9 @@ public class Util {
         return shops.parallelStream().map(shop -> String.format("%s price is %.2f", shop.shopName(), shop.getPriceSync(product))).toList();
     }
 
+    /**
+     * Maintain a thread pool, numbers of thread need to less than or equal to the length of shops
+     */
     private static final ExecutorService executors = Executors.newFixedThreadPool(shops.size(), r -> {
         Thread thread = new Thread(r);
         thread.setDaemon(true);
