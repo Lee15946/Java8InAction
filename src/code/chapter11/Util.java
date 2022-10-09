@@ -52,7 +52,7 @@ public class Util {
         }
     }
 
-    private static long calculateRetrievalTime(long start) {
+    public static long calculateRetrievalTime(long start) {
         return (System.nanoTime() - start) / CONVERSION_RATIO;
     }
 
