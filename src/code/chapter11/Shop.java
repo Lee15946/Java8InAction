@@ -6,12 +6,19 @@ import java.util.concurrent.Future;
 import java.util.random.RandomGenerator;
 
 import static code.chapter11.Util.delay;
+import static code.chapter11.Util.randomDelay;
 
 public record Shop(String shopName) {
 
     double calculatePrice(String product) {
         //Simulate the I/O or network delay
         delay();
+        return RandomGenerator.getDefault().nextDouble() * product.charAt(0) + product.charAt(1);
+    }
+
+    double calculatePriceWithRandomDelay(String product) {
+        //Simulate the I/O or network, the delay time is random
+        randomDelay();
         return RandomGenerator.getDefault().nextDouble() * product.charAt(0) + product.charAt(1);
     }
 
@@ -47,6 +54,11 @@ public record Shop(String shopName) {
         return String.format("%s:%.2f:%s", shopName, price, code);
     }
 
+    public String getPriceWithCodeByRandomDelay(String product) {
+        final var price = calculatePriceWithRandomDelay(product);
+        Discount.Code code = Discount.Code.values()[RandomGenerator.getDefault().nextInt(Discount.Code.values().length)];
+        return String.format("%s:%.2f:%s", shopName, price, code);
+    }
     /**
      * Get exchange rate between dollar and EUR
      */

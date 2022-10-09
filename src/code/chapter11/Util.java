@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.random.RandomGenerator;
+import java.util.stream.Stream;
 
 public class Util {
     private Util() {
@@ -31,6 +33,19 @@ public class Util {
     public static void delay() {
         try {
             Thread.sleep(100L);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException();
+        }
+    }
+
+    /**
+     * Simulate random I/O, network delay
+     */
+    public static void randomDelay() {
+        int delay = 100 + RandomGenerator.getDefault().nextInt(1000);
+        try {
+            Thread.sleep(delay);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new RuntimeException();
@@ -72,13 +87,13 @@ public class Util {
     }
 
     private static List<String> findPricesWithCodeAsync() {
-        final List<CompletableFuture<String>> priceFutures = getCompletableFuturesStream();
+        final Stream<CompletableFuture<String>> priceFutures = getCompletableFuturesStream();
         //Waiting for all tasks done, then extract the return value
-        return priceFutures.stream().map(CompletableFuture::join).toList();
+        return priceFutures.map(CompletableFuture::join).toList();
 
     }
 
-    private static List<CompletableFuture<String>> getCompletableFuturesStream() {
+    private static Stream<CompletableFuture<String>> getCompletableFuturesStream() {
         return shops.stream()
                 //Use async way to get original price
                 .map(shop -> CompletableFuture.supplyAsync(() ->
@@ -87,9 +102,19 @@ public class Util {
                 .map(future -> future.thenApply(Quote::parse))
                 //Use another async task to build the discount price
                 .map(future -> future.thenCompose(
-                        quote -> CompletableFuture.supplyAsync(() -> Discount.applyDiscount(quote), executors)))
-                .toList();
+                        quote -> CompletableFuture.supplyAsync(() -> Discount.applyDiscount(quote), executors)));
     }
+
+    private static Stream<CompletableFuture<String>> getCompletableFuturesStreamWithRandomDelay() {
+        randomDelay();
+        return shops.stream()
+                .map(shop -> CompletableFuture.supplyAsync(() ->
+                        shop.getPriceWithCodeByRandomDelay(PRODUCT_NAME), executors))
+                .map(future -> future.thenApply(Quote::parse))
+                .map(future -> future.thenCompose(
+                        quote -> CompletableFuture.supplyAsync(() -> Discount.applyDiscount(quote), executors)));
+    }
+
     public static void compareSyncMethodWithAsyncMethod() {
         var start = System.nanoTime();
         final var priceSync = singleShop.getPriceSync(PRODUCT_NAME);
@@ -157,7 +182,7 @@ public class Util {
      * The main difference between Future and CompletableFuture is they can use Lambda expression or not.
      * Not too much performance difference.
      */
-    public static void compareFutureWithCompletableFuture(){
+    public static void compareFutureWithCompletableFuture() {
         var start = System.nanoTime();
         final var priceAsEURByFuture = singleShop.getPriceAsEURByFuture(PRODUCT_NAME);
         try {
@@ -177,5 +202,15 @@ public class Util {
         System.out.printf("CompletableFuture Price is %.2f%n", priceByCompletableFuture);
         duration = calculateRetrievalTime(start);
         System.out.println("Using completableFuture async done in " + duration + MILLISECONDS);
+    }
+
+    public static void reactCompletionInCompletableFuture() {
+        var start = System.nanoTime();
+        final var completableFutures = getCompletableFuturesStreamWithRandomDelay().map(future -> future.thenAccept(
+                        s -> System.out.println(s + " (done in " + calculateRetrievalTime(start) + MILLISECONDS + ")")
+                ))
+                .toArray(CompletableFuture[]::new);
+        CompletableFuture.allOf(completableFutures).join();
+        System.out.println("All shops have now responded in " + calculateRetrievalTime(start) + MILLISECONDS);
     }
 }
