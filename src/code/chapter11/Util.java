@@ -13,7 +13,7 @@ public class Util {
     public static final int CONVERSION_RATIO = 1_000_000;
     public static final String PRODUCT_NAME = "myPhone27s";
 
-    private static final Shop shop = new Shop("BestShop");
+    private static final Shop singleShop = new Shop("BestShop");
 
     /**
      * The length of shops need to be double than the number of CPU core.
@@ -72,7 +72,14 @@ public class Util {
     }
 
     private static List<String> findPricesWithCodeAsync() {
-        final var priceFutures = shops.stream()
+        final List<CompletableFuture<String>> priceFutures = getCompletableFuturesStream();
+        //Waiting for all tasks done, then extract the return value
+        return priceFutures.stream().map(CompletableFuture::join).toList();
+
+    }
+
+    private static List<CompletableFuture<String>> getCompletableFuturesStream() {
+        return shops.stream()
                 //Use async way to get original price
                 .map(shop -> CompletableFuture.supplyAsync(() ->
                         shop.getPriceWithCode(PRODUCT_NAME), executors))
@@ -82,19 +89,15 @@ public class Util {
                 .map(future -> future.thenCompose(
                         quote -> CompletableFuture.supplyAsync(() -> Discount.applyDiscount(quote), executors)))
                 .toList();
-        //Waiting for all tasks done, then extract the return value
-        return priceFutures.stream().map(CompletableFuture::join).toList();
-
     }
-
     public static void compareSyncMethodWithAsyncMethod() {
         var start = System.nanoTime();
-        final var priceSync = shop.getPriceSync(PRODUCT_NAME);
+        final var priceSync = singleShop.getPriceSync(PRODUCT_NAME);
         System.out.printf("Sync Price is %.2f%n", priceSync);
         System.out.println("Sync Price returned after " + calculateRetrievalTime(start) + MILLISECONDS);
 
         start = System.nanoTime();
-        final var priceFuture = shop.getPriceAsync(PRODUCT_NAME);
+        final var priceFuture = singleShop.getPriceAsync(PRODUCT_NAME);
         System.out.println("Async Invocation returned after " + calculateRetrievalTime(start) + MILLISECONDS);
         try {
             double priceAsync = priceFuture.get();
@@ -106,7 +109,7 @@ public class Util {
         System.out.println("Async Price returned after " + calculateRetrievalTime(start) + MILLISECONDS);
 
         start = System.nanoTime();
-        final var priceLambdaFuture = shop.getPriceAsyncByLambda(PRODUCT_NAME);
+        final var priceLambdaFuture = singleShop.getPriceAsyncByLambda(PRODUCT_NAME);
         System.out.println("Async Lambda Invocation returned after " + calculateRetrievalTime(start) + MILLISECONDS);
         try {
             double priceAsyncLambda = priceLambdaFuture.get();
@@ -148,5 +151,31 @@ public class Util {
         System.out.println(findPricesWithCodeAsync());
         duration = calculateRetrievalTime(start);
         System.out.println("Using async stream done in " + duration + MILLISECONDS);
+    }
+
+    /**
+     * The main difference between Future and CompletableFuture is they can use Lambda expression or not.
+     * Not too much performance difference.
+     */
+    public static void compareFutureWithCompletableFuture(){
+        var start = System.nanoTime();
+        final var priceAsEURByFuture = singleShop.getPriceAsEURByFuture(PRODUCT_NAME);
+        try {
+            final var priceByFuture = priceAsEURByFuture.get();
+            System.out.printf("Future Price is %.2f%n", priceByFuture);
+
+        } catch (Exception e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(e);
+        }
+        var duration = calculateRetrievalTime(start);
+        System.out.println("Using future async done in " + duration + MILLISECONDS);
+
+        start = System.nanoTime();
+        final var priceAsEURByCompletableFuture = singleShop.getPriceAsEURByCompletableFuture(PRODUCT_NAME);
+        final var priceByCompletableFuture = priceAsEURByCompletableFuture.join();
+        System.out.printf("CompletableFuture Price is %.2f%n", priceByCompletableFuture);
+        duration = calculateRetrievalTime(start);
+        System.out.println("Using completableFuture async done in " + duration + MILLISECONDS);
     }
 }

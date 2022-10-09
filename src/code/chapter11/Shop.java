@@ -1,6 +1,7 @@
 package code.chapter11;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.random.RandomGenerator;
 
@@ -44,5 +45,31 @@ public record Shop(String shopName) {
         final var price = calculatePrice(product);
         Discount.Code code = Discount.Code.values()[RandomGenerator.getDefault().nextInt(Discount.Code.values().length)];
         return String.format("%s:%.2f:%s", shopName, price, code);
+    }
+
+    /**
+     * Get exchange rate between dollar and EUR
+     */
+    private double getExchangeRate() {
+        //Simulate response delay
+        delay();
+        return 1.02;
+    }
+
+    public CompletableFuture<Double> getPriceAsEURByCompletableFuture(String product) {
+        return CompletableFuture.supplyAsync(
+                () -> getPriceSync(product)
+        ).thenCombine(
+                CompletableFuture.supplyAsync(this::getExchangeRate), (price, rate) -> price * rate
+        );
+    }
+
+    public Future<Double> getPriceAsEURByFuture(String product) {
+        final var executor = Executors.newCachedThreadPool();
+        final var futureRate = executor.submit(this::getExchangeRate);
+        return executor.submit(() -> {
+            final var price = getPriceSync(product);
+            return price * futureRate.get();
+        });
     }
 }
