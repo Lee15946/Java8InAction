@@ -16,9 +16,9 @@ public class ListSplitter {
         Integer first = list.get(0);
         List<Integer> rest = list.subList(1, list.size());
 
-        List<List<Integer>> subans = subsets(rest);
-        List<List<Integer>> subans2 = insertAll(first, subans);
-        return concat(subans, subans2);
+        List<List<Integer>> sublist1 = subsets(rest);
+        List<List<Integer>> sublist2 = insertAll(first, sublist1);
+        return concat(sublist1, sublist2);
     }
 
     private static List<List<Integer>> concat(List<List<Integer>> a, List<List<Integer>> b) {

@@ -7,6 +7,7 @@ import static code.chapter11.Util.compareSyncStreamWithAsyncStream;
 import static code.chapter11.Util.reactCompletionInCompletableFuture;
 import static code.chapter13.Util.compareIterationWithRecursion;
 import static code.chapter13.Util.useListSplitter;
+import static code.chapter14.Converter.useCurriedConverter;
 
 public class Main {
     public static void main(String[] args) {
@@ -18,5 +19,7 @@ public class Main {
 
         useListSplitter();
         compareIterationWithRecursion();
+
+        useCurriedConverter();
     }
 }
