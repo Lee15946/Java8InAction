@@ -4,30 +4,13 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import java.util.random.RandomGenerator;
 
-public class Shop {
-    private final String shopName;
+import static code.chapter11.Util.delay;
 
-    public Shop(String shopName) {
-        this.shopName = shopName;
-    }
-
-    public String getShopName() {
-        return shopName;
-    }
+public record Shop(String shopName) {
 
     double calculatePrice(String product) {
         delay();
         return RandomGenerator.getDefault().nextDouble() * product.charAt(0) + product.charAt(1);
-    }
-
-    //Simulate the I/O or network delay
-    public static void delay() {
-        try {
-            Thread.sleep(1000L);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new RuntimeException();
-        }
     }
 
     public double getPriceSync(String product) {

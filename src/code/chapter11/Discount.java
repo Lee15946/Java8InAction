@@ -1,6 +1,6 @@
 package code.chapter11;
 
-import static code.chapter11.Shop.delay;
+import static code.chapter11.Util.delay;
 
 public class Discount {
     public enum Code {
@@ -17,9 +17,9 @@ public class Discount {
         return quote.shopName() + " price is " + apply(quote.price(), quote.discountCode());
     }
 
-    public static double apply(double price,Code code){
+    public static int apply(double price,Code code){
         //Simulate response delay
         delay();
-        return price * (100 - code.percentage) / 100;
+        return (int) (price * (100 - code.percentage) / 100);
     }
 }

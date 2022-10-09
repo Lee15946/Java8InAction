@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 public class Util {
     private Util() {
     }
+
     public static final String MILLISECONDS = " msecs";
     public static final int CONVERSION_RATIO = 1_000_000;
     public static final String PRODUCT_NAME = "myPhone27s";
@@ -26,12 +27,25 @@ public class Util {
             new Shop("Book"), new Shop("Link"),
             new Shop("Plug"));
 
+    //Simulate the I/O or network delay
+    public static void delay() {
+        try {
+            Thread.sleep(100L);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException();
+        }
+    }
+    private static long calculateRetrievalTime(long start) {
+        return (System.nanoTime() - start) / CONVERSION_RATIO;
+    }
+
     public static List<String> findPrices(String product) {
-        return shops.stream().map(shop -> String.format("%s price is %.2f", shop.getShopName(), shop.getPriceSync(product))).toList();
+        return shops.stream().map(shop -> String.format("%s price is %.2f", shop.shopName(), shop.getPriceSync(product))).toList();
     }
 
     public static List<String> findPricesParallel(String product) {
-        return shops.parallelStream().map(shop -> String.format("%s price is %.2f", shop.getShopName(), shop.getPriceSync(product))).toList();
+        return shops.parallelStream().map(shop -> String.format("%s price is %.2f", shop.shopName(), shop.getPriceSync(product))).toList();
     }
 
     public static List<String> findPricesAsync(String product) {
@@ -42,12 +56,14 @@ public class Util {
         });
         final var priceFutures = shops.stream()
                 .map(shop -> CompletableFuture.supplyAsync(
-                        () -> String.format("%s price is %.2f", shop.getShopName(), shop.getPriceSync(product)), executors)).toList();
+                        () -> String.format("%s price is %.2f", shop.shopName(), shop.getPriceSync(product)), executors)).toList();
         return priceFutures.stream().map(CompletableFuture::join).toList();
     }
 
-    private static long calculateRetrievalTime(long start) {
-        return (System.nanoTime() - start) / CONVERSION_RATIO;
+    private static List<String> findPricesWithCode() {
+        return shops.stream().map(shop -> shop.getPriceWithCode(Util.PRODUCT_NAME))
+                .map(Quote::parse)
+                .map(Discount::applyDiscount).toList();
     }
 
     public static void compareSyncMethodWithAsyncMethod() {
@@ -58,7 +74,7 @@ public class Util {
 
         start = System.nanoTime();
         final var priceFuture = shop.getPriceAsync(PRODUCT_NAME);
-        System.out.println("Async Invocation returned after " + calculateRetrievalTime(start)+MILLISECONDS);
+        System.out.println("Async Invocation returned after " + calculateRetrievalTime(start) + MILLISECONDS);
         try {
             double priceAsync = priceFuture.get();
             System.out.printf("Async Price is %.2f%n", priceAsync);
@@ -70,7 +86,7 @@ public class Util {
 
         start = System.nanoTime();
         final var priceLambdaFuture = shop.getPriceAsyncByLambda(PRODUCT_NAME);
-        System.out.println("Async Lambda Invocation returned after " + calculateRetrievalTime(start)+MILLISECONDS);
+        System.out.println("Async Lambda Invocation returned after " + calculateRetrievalTime(start) + MILLISECONDS);
         try {
             double priceAsyncLambda = priceLambdaFuture.get();
             System.out.printf("Async Lambda Price is %.2f%n", priceAsyncLambda);
@@ -99,5 +115,13 @@ public class Util {
         System.out.println(findPricesAsync(PRODUCT_NAME));
         duration = calculateRetrievalTime(start);
         System.out.println("Using async done in " + duration + MILLISECONDS);
+    }
+
+    public static void usingAsyncStream(){
+        var start = System.nanoTime();
+        System.out.println(findPricesWithCode());
+        var duration = calculateRetrievalTime(start);
+        System.out.println("Using sync stream done in " + duration + MILLISECONDS);
+
     }
 }
