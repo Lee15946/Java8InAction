@@ -13,6 +13,10 @@ public class Util {
         System.out.println("This Lazy list is " + two + " " + three + " " + four);
     }
 
+    /**
+     * This method will generate an infinite int list from n.
+     * But the tail only be calculated when the get method being invoked
+     */
     public static LazyList<Integer> from(int n) {
         return new LazyList<>(n, () -> from(n + 1));
     }
