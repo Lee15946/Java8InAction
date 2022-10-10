@@ -8,6 +8,7 @@ import static code.chapter11.Util.reactCompletionInCompletableFuture;
 import static code.chapter13.Util.compareIterationWithRecursion;
 import static code.chapter13.Util.useListSplitter;
 import static code.chapter14.Converter.useCurriedConverter;
+import static code.chapter14.TrainJourneyUtil.compareLinkAndAppend;
 
 public class Main {
     public static void main(String[] args) {
@@ -21,5 +22,6 @@ public class Main {
         compareIterationWithRecursion();
 
         useCurriedConverter();
+        compareLinkAndAppend();
     }
 }
