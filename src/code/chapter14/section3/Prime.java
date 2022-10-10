@@ -14,7 +14,7 @@ public class Prime {
 
         // this will run until a stackoverflow occur because Java does not
         // support tail call elimination
-        //printAll(primes(numbers));
+        printAll(primes(numbers));
     }
 
     static MyList<Integer> primes(MyList<Integer> numbers) {
