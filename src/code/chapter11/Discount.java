@@ -1,6 +1,6 @@
 package code.chapter11;
 
-import static code.chapter11.Util.delay;
+import static code.chapter11.PriceUtil.delay;
 
 public class Discount {
     public enum Code {

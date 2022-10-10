@@ -5,8 +5,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.random.RandomGenerator;
 
-import static code.chapter11.Util.delay;
-import static code.chapter11.Util.randomDelay;
+import static code.chapter11.PriceUtil.delay;
+import static code.chapter11.PriceUtil.randomDelay;
 
 public record Shop(String shopName) {
 

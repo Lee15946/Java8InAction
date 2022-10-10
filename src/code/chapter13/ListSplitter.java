@@ -5,8 +5,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class ListSplitter {
-
-    private ListSplitter() {
+    public static void main(String[] args) {
+        final var list = List.of(1, 2, 3);
+        System.out.println(ListSplitter.subsets(list));
     }
 
     static List<List<Integer>> subsets(List<Integer> list) {

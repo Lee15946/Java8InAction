@@ -2,9 +2,26 @@ package code.chapter13;
 
 import java.util.stream.LongStream;
 
-public class Recursion {
+import static code.chapter11.PriceUtil.MILLISECONDS;
+import static code.chapter11.PriceUtil.calculateRetrievalTime;
 
-    private Recursion() {
+public class Recursion {
+    public static void main(String[] args) {
+        var start = System.nanoTime();
+        System.out.println("Result of factorialIterative is " + factorialIterative(10));
+        System.out.println("Duration is " + calculateRetrievalTime(start) + MILLISECONDS);
+
+        start = System.nanoTime();
+        System.out.println("Result of factorialRecursive is " + factorialRecursive(10));
+        System.out.println("Duration is " + calculateRetrievalTime(start) + MILLISECONDS);
+
+        start = System.nanoTime();
+        System.out.println("Result of factorialStream is " + factorialStream(10));
+        System.out.println("Duration is " + calculateRetrievalTime(start) + MILLISECONDS);
+
+        start = System.nanoTime();
+        System.out.println("Result of factorialTailRecursive is " + factorialTailRecursive(10));
+        System.out.println("Duration is " + calculateRetrievalTime(start) + MILLISECONDS);
     }
 
     static int factorialIterative(int n) {

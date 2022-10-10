@@ -3,7 +3,14 @@ package code.chapter14;
 import java.util.function.DoubleUnaryOperator;
 
 public class Converter {
-    private Converter() {
+    public static void main(String[] args) {
+        double temperature = converterCtof.applyAsDouble(100);
+        double gbp = converterUSDtoGBP.applyAsDouble(1000);
+        double miles = converterKmtoMi.applyAsDouble(100);
+
+        System.out.println("100 degrees Celsius equals " + temperature + " degrees Fahrenheit");
+        System.out.println("100 USD equals " + gbp + " GBP");
+        System.out.println("100 kilometers equals " + miles + " miles");
     }
 
     /**
@@ -19,14 +26,4 @@ public class Converter {
     static DoubleUnaryOperator converterUSDtoGBP = curriedConverter(0.6, 0);
     // Kilometer to Mile
     static DoubleUnaryOperator converterKmtoMi = curriedConverter(0.6214, 0);
-
-    public static void useCurriedConverter() {
-        double temperature = converterCtof.applyAsDouble(100);
-        double gbp = converterUSDtoGBP.applyAsDouble(1000);
-        double miles = converterKmtoMi.applyAsDouble(100);
-
-        System.out.println("100 degrees Celsius equals " + temperature + " degrees Fahrenheit");
-        System.out.println("100 USD equals " + gbp + " GBP");
-        System.out.println("100 kilometers equals " + miles + " miles");
-    }
 }

@@ -7,10 +7,7 @@ import java.util.concurrent.Executors;
 import java.util.random.RandomGenerator;
 import java.util.stream.Stream;
 
-public class Util {
-    private Util() {
-    }
-
+public class PriceUtil {
     public static final String MILLISECONDS = " msecs";
     public static final int CONVERSION_RATIO = 1_000_000;
     public static final String PRODUCT_NAME = "myPhone27s";
@@ -29,6 +26,14 @@ public class Util {
             new Shop("Phone"), new Shop("Case"),
             new Shop("Book"), new Shop("Link"),
             new Shop("Plug"));
+
+    public static void main(String[] args) {
+        compareSyncMethodWithAsyncMethod();
+        compareSyncMethodWithParallelMethodAndAsyncMethod();
+        compareSyncStreamWithAsyncStream();
+        compareFutureWithCompletableFuture();
+        reactCompletionInCompletableFuture();
+    }
 
     public static void delay() {
         try {
@@ -81,7 +86,7 @@ public class Util {
     }
 
     private static List<String> findPricesWithCodeSync() {
-        return shops.stream().map(shop -> shop.getPriceWithCode(Util.PRODUCT_NAME))
+        return shops.stream().map(shop -> shop.getPriceWithCode(PriceUtil.PRODUCT_NAME))
                 .map(Quote::parse)
                 .map(Discount::applyDiscount).toList();
     }

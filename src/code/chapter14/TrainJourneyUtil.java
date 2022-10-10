@@ -1,7 +1,8 @@
 package code.chapter14;
 
 public class TrainJourneyUtil {
-    private TrainJourneyUtil() {
+    public static void main(String[] args) {
+        compareLinkAndAppend();
     }
 
     /**
