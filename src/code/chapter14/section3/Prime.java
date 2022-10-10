@@ -12,7 +12,7 @@ public class Prime {
         System.out.println("Second prime: " + secondPrime);
         System.out.println("Third prime: " + thirdPrime);
 
-        // this will run until a stackoverflow occur because Java does not
+        // This will run until a stackoverflow occur because Java does not
         // support tail call elimination
         printAll(primes(numbers));
     }
