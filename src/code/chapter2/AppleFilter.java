@@ -1,4 +1,4 @@
-package code.chapter1;
+package code.chapter2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,9 +18,16 @@ public class AppleFilter {
         System.out.println(filterApplesByWeight(inventory, 150));
         System.out.println(filterApples(inventory, "green", 0, true));
         System.out.println(filterApples(inventory, "", 150, false));
-        System.out.println(filterApples(inventory,new AppleGreenColorPredicate()));
-        System.out.println(filterApples(inventory,new AppleHeavyWeightPredicate()));
-        System.out.println(filterApples(inventory,new AppleRedHeavyPredicate()));
+        System.out.println(filterApples(inventory, new AppleGreenColorPredicate()));
+        System.out.println(filterApples(inventory, new AppleHeavyWeightPredicate()));
+        System.out.println(filterApples(inventory, new AppleRedHeavyPredicate()));
+        final var redApples = filterApples(inventory, new ApplePredicate() {
+            @Override
+            public boolean test(Apple apple) {
+                return "red".equals(apple.getColor());
+            }
+        });
+        System.out.println(redApples);
     }
 
     public static List<Apple> filterGreenApple(List<Apple> inventory) {
@@ -89,7 +96,7 @@ public class AppleFilter {
         }
     }
 
-    public static class AppleRedHeavyPredicate implements ApplePredicate{
+    public static class AppleRedHeavyPredicate implements ApplePredicate {
         @Override
         public boolean test(Apple apple) {
             return "red".equals(apple.getColor()) && apple.getWeight() > 150;

@@ -1,8 +1,8 @@
-package code.chapter1;
+package code.chapter2;
 
 public class Apple {
-    private int weight;
-    private String color;
+    private final int weight;
+    private final String color;
 
     public Apple(int weight, String color) {
         this.weight = weight;
@@ -13,16 +13,8 @@ public class Apple {
         return weight;
     }
 
-    public void setWeight(Integer weight) {
-        this.weight = weight;
-    }
-
     public String getColor() {
         return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
     }
 
     public String toString() {
