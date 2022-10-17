@@ -2,7 +2,9 @@ package code.chapter2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class AppleFilter {
     public static void main(String[] args) {
@@ -28,6 +30,21 @@ public class AppleFilter {
             }
         });
         System.out.println(redApples);
+
+        final var greenApples = filterApples(inventory, apple -> "green".equals(apple.getColor()));
+        System.out.println(greenApples);
+
+        List<Apple> heavyApples = myFilter(inventory, apple -> apple.getWeight() > 150);
+        System.out.println(heavyApples);
+        final var integers = Stream.iterate(0, i -> i + 1).limit(20).toList();
+        List<Integer> evenNumbers = myFilter(integers, (Integer i) -> i % 2 == 0);
+        System.out.println(evenNumbers);
+
+        inventory.sort(Comparator.comparing(Apple::getWeight));
+        System.out.println(inventory);
+
+        Thread t = new Thread(() -> System.out.println("Hello world!"));
+        t.start();
     }
 
     public static List<Apple> filterGreenApple(List<Apple> inventory) {
@@ -76,7 +93,6 @@ public class AppleFilter {
         for (Apple apple : inventory) {
             if (applePredicate.test(apple)) {
                 result.add(apple);
-
             }
         }
         return result;
@@ -101,5 +117,15 @@ public class AppleFilter {
         public boolean test(Apple apple) {
             return "red".equals(apple.getColor()) && apple.getWeight() > 150;
         }
+    }
+
+    public static <T> List<T> myFilter(List<T> list, MyPredicate<T> p) {
+        List<T> result = new ArrayList<>();
+        for (T item : list) {
+            if (p.test(item)) {
+                result.add(item);
+            }
+        }
+        return result;
     }
 }
