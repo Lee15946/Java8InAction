@@ -22,6 +22,6 @@ public class FileProcess {
         try (final var br = new BufferedReader(new FileReader("data.txt"))) {
             return bufferedReaderProcessor.process(br);
         }
-
     }
+
 }

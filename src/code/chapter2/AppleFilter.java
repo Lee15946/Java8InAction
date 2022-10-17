@@ -2,9 +2,10 @@ package code.chapter2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
+
+import static java.util.Comparator.comparing;
 
 public class AppleFilter {
     public static void main(String[] args) {
@@ -40,7 +41,7 @@ public class AppleFilter {
         List<Integer> evenNumbers = myFilter(integers, (Integer i) -> i % 2 == 0);
         System.out.println(evenNumbers);
 
-        inventory.sort(Comparator.comparing(Apple::getWeight));
+        inventory.sort(comparing(Apple::getWeight));
         System.out.println(inventory);
 
         Thread t = new Thread(() -> System.out.println("Hello world!"));
