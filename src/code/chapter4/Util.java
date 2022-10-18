@@ -1,6 +1,7 @@
 package code.chapter4;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -50,11 +51,13 @@ public class Util {
                 .toList();
         System.out.println(threeHighCaloricDishNames);
 
+        //External iteration with a for-each loop
         List<String> namesByFor = new ArrayList<>();
         for (Dish dish : menu) {
             namesByFor.add(dish.getName());
         }
 
+        //External iteration using an iterator behind the scenes
         List<String> namesByIterator = new ArrayList<>();
         Iterator<Dish> iterator = menu.iterator();
         while (iterator.hasNext()) {
@@ -63,6 +66,7 @@ public class Util {
 
         }
 
+        //Streams: internal iteration
         List<String> namesByStream = menu.stream().map(Dish::getName).toList();
 
         System.out.println(namesByFor);
@@ -81,6 +85,43 @@ public class Util {
                 .toList();
         System.out.println(names);
 
+        //Filtering with a predicate
+        System.out.println(menu.stream()
+                .filter(Dish::isVegetarian)
+                .toList());
+
+        //Filtering unique elements
+        final var numbers = List.of(1, 2, 1, 3, 3, 2, 4);
+        System.out.println(numbers.stream()
+                .filter(i -> i % 2 == 0)
+                .distinct()
+                .toList());
+
+        //Truncating a stream
+        System.out.println(menu.stream()
+                .filter(dish -> dish.getCalories() > 300)
+                .limit(3)
+                .toList());
+
+        //Skipping elements
+        System.out.println(menu.stream()
+                .filter(dish -> dish.getCalories() > 300)
+                .skip(2)
+                .toList());
+
+        //Applying a function to each element of a stream
+        System.out.println(menu.stream()
+                .map(Dish::getName)
+                .map(String::length)
+                .toList());
+
+        //Flattening streams
+        final var words = List.of("Hello", "World");
+        System.out.println(words.stream()
+                .map(word -> word.split(""))
+                .flatMap(Arrays::stream)
+                .distinct()
+                .toList());
     }
 
 }
