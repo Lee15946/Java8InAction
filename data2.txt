@@ -1,0 +1,6 @@
+Hopefully by now you’re convinced that streams are very powerful
+and useful to express data processing queries.
+So far, you were able to get a stream from a collection using the stream method.
+In addition, we showed you how to create numerical streams from a rang eof numbers.
+But you can create streams in many more ways! This section shows how you can create a stream from a sequence of values,
+from an array, from a file, and even from a generative function to create infinite streams!
