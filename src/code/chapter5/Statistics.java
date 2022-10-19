@@ -26,6 +26,8 @@ public class Statistics {
         System.out.println(sumValueInCambridge(transactions));
         System.out.println(findMax(transactions));
         System.out.println(findMin(transactions));
+
+
     }
 
     public static List<Transaction> filterAt2011(List<Transaction> transactions) {
