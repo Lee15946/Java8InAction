@@ -5,9 +5,9 @@ import code.chapter4.Dish;
 import java.util.Arrays;
 import java.util.List;
 
-import static code.chapter4.Util.MENU;
+import static code.chapter4.Main.MENU;
 
-public class Util {
+public class Main {
     public static void main(String[] args) {
         //Filtering with a predicate
         System.out.println(MENU.stream()

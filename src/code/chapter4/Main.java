@@ -7,7 +7,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.groupingBy;
 
-public class Util {
+public class Main {
     public static final List<Dish> MENU = List.of(
              new Dish("pork", false, 800, Dish.Type.MEAT),
              new Dish("beef", false, 200, Dish.Type.MEAT),

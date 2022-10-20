@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 
 import static java.util.Comparator.comparing;
 
-public class Util {
+public class Main {
     public static void main(String[] args) {
         final var list = List.of("lambdas", "in", "action");
         System.out.println(map(list, String::length));

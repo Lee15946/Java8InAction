@@ -4,7 +4,7 @@ import code.chapter4.Dish;
 
 import java.util.stream.IntStream;
 
-import static code.chapter4.Util.MENU;
+import static code.chapter4.Main.MENU;
 
 public class NumericStream {
     public static void main(String[] args) {

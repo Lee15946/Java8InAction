@@ -14,7 +14,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 
-import static code.chapter4.Util.MENU;
+import static code.chapter4.Main.MENU;
 import static code.chapter6.Collector.getTransactions;
 
 public class ToListCollector {
