@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.counting;
@@ -56,6 +57,8 @@ public class Collector {
         System.out.println(transactions.stream().collect(partitioningBy(transaction ->
                 transaction.getValue() > 800, counting())));
 
+        final List<Integer> numbers = List.of(1, 2, 3, 4, 5, 6);
+        System.out.println(numbers.stream().collect(partitioningBy(Collector::isPrime)));
     }
 
     public static List<Transaction> getTransactions() {
@@ -71,5 +74,10 @@ public class Collector {
                 new Transaction(mario, 2012, 700),
                 new Transaction(alan, 2012, 950)
         );
+    }
+
+    public static boolean isPrime(int candidate) {
+        int candidateRoot = (int) Math.sqrt(candidate);
+        return IntStream.rangeClosed(2, candidateRoot).noneMatch(i -> candidate % i == 0);
     }
 }
