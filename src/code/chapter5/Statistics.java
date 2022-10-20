@@ -1,22 +1,13 @@
 package code.chapter5;
 
+import code.chapter6.Collector;
+
 import java.util.Comparator;
 import java.util.List;
 
 public class Statistics {
     public static void main(String[] args) {
-        Trader raoul = new Trader("Raoul", "Cambridge");
-        Trader mario = new Trader("Mario", "Milan");
-        Trader alan = new Trader("Alan", "Cambridge");
-        Trader brian = new Trader("Brian", "Cambridge");
-        List<Transaction> transactions = List.of(
-                new Transaction(brian, 2011, 300),
-                new Transaction(raoul, 2012, 1000),
-                new Transaction(raoul, 2011, 400),
-                new Transaction(mario, 2012, 710),
-                new Transaction(mario, 2012, 700),
-                new Transaction(alan, 2012, 950)
-        );
+        final var transactions = Collector.getTransactions();
 
         System.out.println(filterAt2011(transactions));
         System.out.println(filterCity(transactions));
@@ -54,7 +45,7 @@ public class Statistics {
         return transactions.stream().map(Transaction::getTrader).anyMatch(i -> i.getCity().equals("Milan"));
     }
 
-    public static Integer sumValueInCambridge (List<Transaction> transactions) {
+    public static Integer sumValueInCambridge(List<Transaction> transactions) {
         return transactions.stream().filter(transaction -> transaction.getTrader().getCity().equals("Cambridge"))
                 .map(Transaction::getValue).reduce(Integer::sum).orElse(0);
     }
