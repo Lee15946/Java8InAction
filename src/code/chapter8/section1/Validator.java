@@ -1,4 +1,4 @@
-package code.chapter8.section2;
+package code.chapter8.section1;
 
 public class Validator {
     private final ValidationStrategy validationStrategy;

@@ -1,18 +1,25 @@
 package code.chapter8.section3;
 
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
+
 public class Main {
     public static void main(String[] args) {
-        //Observer pattern
-        Feed feed = new Feed();
-        feed.registerObserver(new NYTimes());
-        feed.registerObserver(new Guardian());
-        feed.registerObserver(new LeMonde());
-        feed.registerObserver(tweet -> {
-            if (tweet != null && tweet.contains("book")) {
-                System.out.println("Recommend book is: " + tweet);
-            }
-        });
-        feed.notifyObserver("The queen said her favorite book is Java 8 in Action!");
+        //Chain of responsibility pattern
+        final var p1 = new HeaderTextProcessing();
+        final var p2 = new SpellCheckProcessing();
+        p1.setSuccessor(p2);
+        final var content = "Study labda now";
+        final var result = p1.handle(content);
+
+        System.out.println(result);
+
+        UnaryOperator<String> headerProcessing = (String text) -> "From Jason Lee: " + text;
+        UnaryOperator<String> spellCheckProcessing =
+                (String input) -> input.replace("labda", "lambda");
+        Function<String, String> pipeline = headerProcessing.andThen(spellCheckProcessing);
+
+        System.out.println(pipeline.apply(content));
 
     }
 }

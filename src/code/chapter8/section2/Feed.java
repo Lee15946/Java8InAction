@@ -1,4 +1,4 @@
-package code.chapter8.section3;
+package code.chapter8.section2;
 
 import java.util.ArrayList;
 import java.util.List;

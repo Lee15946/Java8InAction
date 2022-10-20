@@ -1,4 +1,4 @@
-package code.chapter8.section3;
+package code.chapter8.section2;
 
 public class Guardian implements Observer {
     @Override
